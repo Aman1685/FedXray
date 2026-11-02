@@ -1,0 +1,78 @@
+
+# ==============================
+# DATASETS (Do not upload)
+# ==============================
+dataset/NIH_ChestXray14/
+dataset/processed/
+dataset/splits/
+*.zip
+*.7z
+*.rar
+
+# ==============================
+# MODEL CHECKPOINTS
+# ==============================
+results/checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.keras
+*.h5
+
+# ==============================
+# GENERATED RESULTS
+# ==============================
+results/graphs/
+results/partition_analysis/
+results/centralized/
+results/evaluation/
+results/federated/
+
+# ==============================
+# PYTHON CACHE
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# ==============================
+# VIRTUAL ENVIRONMENT
+# ==============================
+venv/
+.venv/
+env/
+
+# ==============================
+# JUPYTER
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# IDE / EDITOR
+# ==============================
+.vscode/
+.idea/
+
+# ==============================
+# LOGS AND TEMPORARY FILES
+# ==============================
+*.log
+*.tmp
+*.temp
+
+# ==============================
+# ENVIRONMENT VARIABLES / SECRETS
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# OS FILES
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
