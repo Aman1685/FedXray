@@ -3,11 +3,13 @@ import argparse
 import os
 import csv
 import random
+
 import numpy as np
 import torch
 import torch.nn as nn
 
 from torch.utils.data import DataLoader
+
 from sklearn.metrics import (
     roc_auc_score,
     average_precision_score,
@@ -20,10 +22,18 @@ from dataset.nih_dataset import (
     NIHChestXrayDataset,
     DISEASE_LABELS
 )
+
 from model.custom_cnn import CustomCNN
+
 from ml.clients.federated_client import train_client
+from ml.clients.fedprox_client import train_fedprox_client
+
 from ml.aggregation.fedavg import fedavg_aggregate
 
+
+# ==========================================================
+# 1. GLOBAL MODEL EVALUATION
+# ==========================================================
 
 def evaluate_global_model(
     model,
@@ -57,6 +67,7 @@ def evaluate_global_model(
                 dtype=torch.float16,
                 enabled=(device.type == "cuda")
             ):
+
                 logits = model(images)
                 loss = criterion(logits, labels)
 
@@ -141,9 +152,13 @@ def evaluate_global_model(
     return validation_loss, metrics, total_samples
 
 
+# ==========================================================
+# 2. FEDERATED TRAINING
+# ==========================================================
+
 def run_federated_training(args):
 
-    # Reproducibility: use the same seed for every experiment
+    # Reproducibility
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -161,12 +176,19 @@ def run_federated_training(args):
     )
 
     print("\n========== FEDERATED TRAINING ==========")
+    print("Algorithm:", args.algorithm.upper())
     print("Device:", device)
+
+    if args.algorithm == "fedprox":
+        print("Proximal coefficient (mu):", args.mu)
 
     if device.type == "cuda":
         print("GPU:", torch.cuda.get_device_name(0))
 
+    # ------------------------------------------------------
     # Dataset paths
+    # ------------------------------------------------------
+
     train_csv = os.path.join(
         "dataset", "splits", "train.csv"
     )
@@ -179,7 +201,10 @@ def run_federated_training(args):
         "dataset", "splits", args.partition
     )
 
+    # ------------------------------------------------------
     # Load datasets
+    # ------------------------------------------------------
+
     train_dataset = NIHChestXrayDataset(train_csv)
     val_dataset = NIHChestXrayDataset(val_csv)
 
@@ -191,7 +216,10 @@ def run_federated_training(args):
         pin_memory=(device.type == "cuda")
     )
 
-    # Calculate global class weights using training data only
+    # ------------------------------------------------------
+    # Calculate global class weights
+    # ------------------------------------------------------
+
     positive_counts = train_dataset.labels.sum(axis=0)
     negative_counts = len(train_dataset) - positive_counts
 
@@ -209,15 +237,21 @@ def run_federated_training(args):
 
     print("\nGlobal class weights calculated.")
 
-    # Same weighted BCE objective for all clients and validation
     criterion = nn.BCEWithLogitsLoss(
         pos_weight=pos_weights
     )
 
-    # Initialize a fresh global model
+    # ------------------------------------------------------
+    # Initialize global model
+    # ------------------------------------------------------
+
     global_model = CustomCNN(
         num_classes=14
     ).to(device)
+
+    # ------------------------------------------------------
+    # Output directories and filenames
+    # ------------------------------------------------------
 
     checkpoint_dir = "results/checkpoints"
     history_dir = "results/federated"
@@ -225,18 +259,34 @@ def run_federated_training(args):
     os.makedirs(checkpoint_dir, exist_ok=True)
     os.makedirs(history_dir, exist_ok=True)
 
+    checkpoint_name = args.checkpoint_name
+
+    if checkpoint_name is None:
+        checkpoint_name = (
+            f"{args.algorithm}_custom_cnn_"
+            f"{args.partition}_seed{args.seed}_best.pth"
+        )
+
     checkpoint_path = os.path.join(
         checkpoint_dir,
-        args.checkpoint_name
+        checkpoint_name
     )
 
     history_path = os.path.join(
         history_dir,
-        f"{args.partition}_fedavg_history.csv"
+        f"{args.partition}_{args.algorithm}_seed{args.seed}_history.csv"
     )
+
+    # ------------------------------------------------------
+    # Training setup
+    # ------------------------------------------------------
 
     best_val_loss = float("inf")
     history = []
+
+    # ======================================================
+    # 3. FEDERATED ROUNDS
+    # ======================================================
 
     for round_num in range(1, args.rounds + 1):
 
@@ -248,7 +298,10 @@ def run_federated_training(args):
         client_sizes = []
         client_losses = []
 
+        # --------------------------------------------------
         # Train clients sequentially
+        # --------------------------------------------------
+
         for client_id in range(1, args.num_clients + 1):
 
             csv_file = os.path.join(
@@ -261,23 +314,52 @@ def run_federated_training(args):
                     f"Client dataset not found: {csv_file}"
                 )
 
-            local_state, num_samples, loss = train_client(
-                global_model=global_model,
-                csv_file=csv_file,
-                client_id=client_id,
-                device=device,
-                local_epochs=args.local_epochs,
-                batch_size=args.batch_size,
-                learning_rate=args.lr,
-                max_batches=args.max_batches,
-                pos_weight=pos_weights
-            )
+            # ==============================================
+            # FEDAVG CLIENT TRAINING
+            # ==============================================
+
+            if args.algorithm == "fedavg":
+
+                local_state, num_samples, loss = train_client(
+                    global_model=global_model,
+                    csv_file=csv_file,
+                    client_id=client_id,
+                    device=device,
+                    local_epochs=args.local_epochs,
+                    batch_size=args.batch_size,
+                    learning_rate=args.lr,
+                    max_batches=args.max_batches,
+                    pos_weight=pos_weights
+                )
+
+            # ==============================================
+            # FEDPROX CLIENT TRAINING
+            # ==============================================
+
+            else:
+
+                local_state, num_samples, loss = train_fedprox_client(
+                    global_model=global_model,
+                    csv_file=csv_file,
+                    client_id=client_id,
+                    device=device,
+                    local_epochs=args.local_epochs,
+                    batch_size=args.batch_size,
+                    learning_rate=args.lr,
+                    max_batches=args.max_batches,
+                    pos_weight=pos_weights,
+                    mu=args.mu
+                )
 
             client_states.append(local_state)
             client_sizes.append(num_samples)
             client_losses.append(loss)
 
-        # Aggregate client model weights
+        # --------------------------------------------------
+        # Aggregate client weights
+        # Both algorithms use FedAvg aggregation
+        # --------------------------------------------------
+
         aggregated_state = fedavg_aggregate(
             client_states,
             client_sizes
@@ -290,7 +372,10 @@ def run_federated_training(args):
             for loss, size in zip(client_losses, client_sizes)
         ) / sum(client_sizes)
 
+        # --------------------------------------------------
         # Evaluate global model
+        # --------------------------------------------------
+
         val_loss, metrics, val_samples = evaluate_global_model(
             model=global_model,
             loader=val_loader,
@@ -299,19 +384,32 @@ def run_federated_training(args):
             max_batches=args.max_val_batches
         )
 
+        # --------------------------------------------------
+        # Display results
+        # --------------------------------------------------
+
         print("\n========== ROUND RESULTS ==========")
+
+        print("Algorithm:", args.algorithm.upper())
         print("Round:", round_num)
         print("Training samples:", sum(client_sizes))
         print("Validation samples:", val_samples)
+
         print(f"Weighted training loss: {weighted_train_loss:.6f}")
         print(f"Validation loss: {val_loss:.6f}")
 
         for metric, value in metrics.items():
             print(f"{metric}: {value:.4f}")
 
-        # Save history
+        # --------------------------------------------------
+        # Save experiment history
+        # --------------------------------------------------
+
         row = {
             "round": round_num,
+            "algorithm": args.algorithm,
+            "mu": args.mu if args.algorithm == "fedprox" else "",
+            "seed": args.seed,
             "partition": args.partition,
             "train_samples": sum(client_sizes),
             "validation_samples": val_samples,
@@ -322,34 +420,45 @@ def run_federated_training(args):
 
         history.append(row)
 
-        # Save the best global model based on validation loss
+        # --------------------------------------------------
+        # Save best global checkpoint
+        # --------------------------------------------------
+
         if val_loss < best_val_loss:
 
             best_val_loss = val_loss
 
+            checkpoint = {
+                "model_name": "custom_cnn",
+                "seed": args.seed,
+                "model_state_dict": global_model.state_dict(),
+                "round": round_num,
+                "num_clients": args.num_clients,
+                "partition": args.partition,
+                "algorithm": args.algorithm,
+                "mu": args.mu if args.algorithm == "fedprox" else None,
+                "local_epochs": args.local_epochs,
+                "batch_size": args.batch_size,
+                "learning_rate": args.lr,
+                "client_samples": client_sizes,
+                "client_losses": client_losses,
+                "weighted_training_loss": weighted_train_loss,
+                "validation_loss": val_loss,
+                "validation_metrics": metrics,
+                "num_classes": 14,
+                "best_round": round_num
+            }
+
             torch.save(
-                {
-                    "model_name": "custom_cnn",
-                    "seed": args.seed,
-                    "model_state_dict": global_model.state_dict(),
-                    "round": round_num,
-                    "num_clients": args.num_clients,
-                    "partition": args.partition,
-                    "algorithm": "FedAvg",
-                    "local_epochs": args.local_epochs,
-                    "batch_size": args.batch_size,
-                    "client_samples": client_sizes,
-                    "client_losses": client_losses,
-                    "weighted_training_loss": weighted_train_loss,
-                    "validation_loss": val_loss,
-                    "validation_metrics": metrics,
-                    "num_classes": 14,
-                    "best_round": round_num
-                },
+                checkpoint,
                 checkpoint_path
             )
 
             print("\nBest global checkpoint saved!")
+
+        # --------------------------------------------------
+        # Write history CSV
+        # --------------------------------------------------
 
         with open(
             history_path,
@@ -380,16 +489,33 @@ def run_federated_training(args):
                 "MB"
             )
 
+    # ======================================================
+    # 4. TRAINING COMPLETED
+    # ======================================================
+
     print("\n========== FEDERATED TRAINING COMPLETED ==========")
+
+    print("Algorithm:", args.algorithm.upper())
     print("Best validation loss:", best_val_loss)
     print("Global checkpoint:", checkpoint_path)
     print("Experiment history:", history_path)
 
 
+# ==========================================================
+# 5. COMMAND LINE ARGUMENTS
+# ==========================================================
+
 def main():
 
     parser = argparse.ArgumentParser(
-        description="FedXray FedAvg training"
+        description="FedXray Federated Learning Training"
+    )
+
+    parser.add_argument(
+        "--algorithm",
+        type=str,
+        default="fedavg",
+        choices=["fedavg", "fedprox"]
     )
 
     parser.add_argument(
@@ -410,6 +536,13 @@ def main():
     parser.add_argument("--lr", type=float, default=0.0001)
 
     parser.add_argument(
+        "--mu",
+        type=float,
+        default=0.01,
+        help="FedProx proximal coefficient"
+    )
+
+    parser.add_argument(
         "--max-batches",
         type=int,
         default=None
@@ -424,7 +557,7 @@ def main():
     parser.add_argument(
         "--checkpoint-name",
         type=str,
-        default="fedavg_custom_cnn_iid_seed42_best.pth"
+        default=None
     )
 
     parser.add_argument(
@@ -435,6 +568,10 @@ def main():
 
     args = parser.parse_args()
 
+    # ------------------------------------------------------
+    # Argument validation
+    # ------------------------------------------------------
+
     if args.num_clients < 1:
         parser.error("--num-clients must be positive")
 
@@ -443,6 +580,12 @@ def main():
 
     if args.batch_size < 1:
         parser.error("--batch-size must be positive")
+
+    if args.lr <= 0:
+        parser.error("--lr must be positive")
+
+    if args.algorithm == "fedprox" and args.mu <= 0:
+        parser.error("FedProx requires --mu greater than zero")
 
     if args.max_batches is not None and args.max_batches < 1:
         parser.error("--max-batches must be positive")
