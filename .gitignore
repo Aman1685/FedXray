@@ -13,13 +13,15 @@ dataset/splits/
 # MODEL CHECKPOINTS
 # ==============================
 results/checkpoints/
-*.pth
 *.pt
 *.ckpt
 *.onnx
 *.keras
 *.h5
 
+results/checkpoints/fedavg_custom_cnn_iid_best.pth
+results/checkpoints/fedavg_iid_smoke.pth
+results/checkpoints/fedavg_iid_validation_smoke.pth
 # ==============================
 # GENERATED RESULTS
 # ==============================
