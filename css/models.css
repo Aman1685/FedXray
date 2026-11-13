@@ -1,0 +1,70 @@
+/* models.css: styles used only on the Model Selection page */
+
+.ms-page { display: grid; gap: 1.25rem; }
+.ms-intro { max-width: 70ch; }
+.ms-intro h2 { font-size: 1.8rem; }
+.ms-intro p { margin: 0; color: var(--color-muted); }
+
+/* Selections on the left, the summary on the right */
+.ms-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.ms-main { display: grid; gap: 1.25rem; }
+.ms-summary { position: sticky; top: 5.5rem; }          /* stays in view while scrolling */
+.ms-number { font: 700 1.1rem var(--font-heading); }
+
+/* Banner colour depends on where the list came from (set by models.js) */
+.notice[data-source="backend"] { border-left-color: var(--teal-500); background: var(--color-hover); }
+
+/* A solid button for the main action */
+.button--primary { background: var(--gradient-accent); color: #fff; }
+.button--primary:hover { box-shadow: 0 6px 16px rgba(20, 184, 166, 0.3); }
+.button[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
+/* ---------- Model cards (radio buttons styled as cards) ---------- */
+.select-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+.select-card {
+  position: relative; display: flex; flex-direction: column; gap: 0.5rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+  border: 1px solid var(--color-line); border-top: 4px solid var(--model-color);
+  border-radius: 10px; background: var(--color-surface-2); cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.select-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+.select-card input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }   /* invisible, covers the card */
+.select-card:has(input:focus-visible) { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.select-card.is-selected { background: var(--color-hover); box-shadow: 0 0 0 2px var(--model-color); }
+.select-card.is-disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+.select-card.is-disabled input { cursor: not-allowed; }
+.select-card__top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.select-card__top strong { font: 700 1.1rem var(--font-heading); }
+.select-card__text { font-size: 0.92rem; color: var(--color-muted); }
+.select-card__foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.25rem; }
+.select-card__picked { display: none; font-size: 0.85rem; font-weight: 600; color: var(--color-primary); }
+.select-card.is-selected .select-card__picked { display: inline; }
+
+/* ---------- Configuration options ---------- */
+.config-list { display: grid; gap: 0.6rem; }
+.config-option {
+  display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.8rem 1rem;
+  border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-surface);
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.config-option:hover { border-color: var(--color-primary); }
+.config-option.is-selected { border-color: var(--color-primary); background: var(--color-hover); }
+.config-option input { margin-top: 0.3rem; accent-color: var(--color-primary); }
+.config-option strong, .config-option small { display: block; }
+.config-option small { color: var(--color-muted); }
+
+.ms-empty { margin: 0; padding: 1rem; border: 1px dashed var(--color-line); border-radius: 10px; color: var(--color-muted); text-align: center; }
+
+/* ---------- Summary ---------- */
+.ms-summary__list { margin: 0 0 1rem; }
+.ms-summary__list div { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.65rem 0; border-top: 1px solid var(--color-line); }
+.ms-summary__list dt { color: var(--color-muted); }
+.ms-summary__list dd { margin: 0; font-weight: 500; text-align: right; }
+.ms-summary__actions { display: grid; gap: 0.6rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .ms-layout { grid-template-columns: 1fr; }
+  .ms-summary { position: static; }
+}

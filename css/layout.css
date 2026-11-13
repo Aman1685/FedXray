@@ -1,0 +1,103 @@
+/* layout.css: page structure (sidebar, header, content area) */
+
+.skip-link { position: absolute; left: -999px; top: 0; padding: 0.5rem 1rem; background: var(--color-surface); z-index: 100; }
+.skip-link:focus { left: 0; }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed; inset: 0 auto 0 0;       /* top right bottom left */
+  width: var(--sidebar-width);
+  display: flex; flex-direction: column; gap: 1.5rem;
+  padding: 1.25rem 0.9rem;
+  background: var(--gradient-sidebar);
+  color: var(--color-sidebar-text);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+  z-index: 30;
+  transition: transform 0.25s ease;
+}
+
+.brand { display: flex; align-items: center; gap: 0.75rem; padding: 0 0.5rem; }
+.brand p { margin: 0; }
+.brand__mark {
+  display: grid; place-items: center; width: 40px; height: 40px;
+  border-radius: 12px; background: var(--gradient-accent); color: #fff;
+  font: 700 1rem var(--font-heading);
+}
+.brand__name { font: 700 1.2rem var(--font-heading); color: #fff; }
+.brand__tagline { font-size: 0.8rem; }
+
+.sidebar__nav { display: flex; flex-direction: column; gap: 4px; }
+.nav-link {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.65rem 0.8rem; border-radius: 10px;
+  color: inherit; font-weight: 500; text-decoration: none;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+.nav-link .icon { opacity: 0.75; transition: color 0.15s, opacity 0.15s; }
+.nav-link:hover { background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(2px); }
+.nav-link.is-active {
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.22), rgba(47, 143, 232, 0.08));
+  box-shadow: inset 3px 0 0 var(--color-glow);
+  color: #fff;
+}
+.nav-link.is-active .icon { color: var(--color-glow); opacity: 1; }
+
+.sidebar__note {
+  margin-top: auto; padding: 0.9rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04); font-size: 0.82rem;
+}
+.sidebar__note strong { display: block; margin-bottom: 0.2rem; color: #fff; }
+.sidebar__note p { margin: 0; }
+
+/* ---------- Main area ---------- */
+.main { margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.9rem 2rem;
+  background: var(--color-topbar);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-line);
+}
+.topbar__heading { flex: 1; min-width: 0; }
+.topbar__title { margin: 0; font-size: 1.35rem; }
+.topbar__subtitle { margin: 0; overflow: hidden; font-size: 0.85rem; color: var(--color-muted); white-space: nowrap; text-overflow: ellipsis; }
+.topbar__actions { display: flex; align-items: center; gap: 0.6rem; }
+.topbar .menu-toggle { display: none; }       /* only shown on tablet and phone */
+
+.content { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 1.75rem 2rem 3rem; }
+
+/* Only the active view is visible. navigation.js adds/removes .is-active */
+.view { display: none; }
+.view.is-active { display: block; }
+
+.sidebar-overlay { display: none; }
+
+/* ---------- Tablet and phone: sidebar becomes a slide-in menu ---------- */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); }
+  .main { margin-left: 0; }
+  .topbar .menu-toggle { display: inline-grid; }
+
+  body.sidebar-open .sidebar { transform: none; box-shadow: 0 0 40px rgba(0, 0, 0, 0.45); }
+  body.sidebar-open .sidebar-overlay {
+    display: block; position: fixed; inset: 0;
+    background: var(--color-overlay); z-index: 20;
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar { padding: 0.7rem 1rem; gap: 0.6rem; }
+  .topbar__title { font-size: 1.15rem; }
+  .topbar__subtitle, .theme-toggle__label { display: none; }
+  .theme-toggle { width: 40px; padding: 0; justify-content: center; }
+  .content { padding: 1.25rem 1rem 2.5rem; }
+}
+
+@media (max-width: 480px) {
+  .status-pill #backend-status-text { display: none; }   /* the coloured dot is enough */
+  .status-pill { width: 40px; padding: 0; justify-content: center; }
+}

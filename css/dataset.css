@@ -1,0 +1,378 @@
+/* ==================================================
+   DATASET PAGE
+   Uses shared design tokens from base.css
+   ================================================== */
+
+/* ---------- Page introduction ---------- */
+
+#view-dataset {
+  width: 100%;
+}
+
+.page-intro {
+  margin-bottom: 1.5rem;
+  padding: 1.8rem 2rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(
+      120deg,
+      var(--color-surface) 0%,
+      var(--color-surface-2) 100%
+    );
+  box-shadow: var(--shadow-card);
+}
+
+.page-intro h2 {
+  margin-bottom: 0.65rem;
+  color: var(--color-ink);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.page-intro p {
+  max-width: 850px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* ---------- Two-column layout ---------- */
+
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* ---------- Dataset information panel ---------- */
+
+#view-dataset .panel {
+  min-width: 0;
+}
+
+.panel__header {
+  padding: 1.35rem 1.5rem 0.85rem;
+}
+
+.panel__header h3 {
+  margin-bottom: 0.35rem;
+  font-size: 1.12rem;
+  color: var(--color-ink);
+}
+
+.panel__header p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.info-list {
+  display: grid;
+  margin: 0;
+  padding: 0.4rem 1.5rem 1.25rem;
+}
+
+.info-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.info-list > div:last-child {
+  border-bottom: none;
+}
+
+.info-list dt {
+  flex: 0 0 38%;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.info-list dd {
+  flex: 1;
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Important notes ---------- */
+
+.notes {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0.4rem 1.5rem 1.5rem;
+  list-style: none;
+}
+
+.notes li {
+  position: relative;
+  padding: 0.9rem 1rem 0.9rem 2.6rem;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.notes li::before {
+  content: "i";
+  position: absolute;
+  top: 0.95rem;
+  left: 0.9rem;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-glow-soft);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ---------- Label distribution chart ---------- */
+
+.bar-chart {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 1rem 1.5rem 1.25rem;
+  list-style: none;
+}
+
+.bar-chart li {
+  display: grid;
+  grid-template-columns: minmax(110px, 155px) minmax(50px, 1fr) 65px;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.bar-chart li > span:first-child {
+  color: var(--color-ink);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.bar-chart__track {
+  display: block;
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-track);
+}
+
+.bar-chart__fill {
+  display: block;
+  height: 100%;
+  min-width: 3px;
+  border-radius: inherit;
+  background: var(--gradient-accent);
+  transition: width 0.5s ease;
+}
+
+.bar-chart__value {
+  color: var(--color-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel__footer {
+  margin: 0;
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+/* ---------- IID and Non-IID comparison ---------- */
+
+.split-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.split-compare__case {
+  min-width: 0;
+  padding: 1.2rem;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: var(--color-surface-2);
+}
+
+.split-compare__case h4 {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 7px;
+  background: var(--color-glow-soft);
+  color: var(--color-primary);
+  font-size: 0.95rem;
+}
+
+.split-compare__case p {
+  min-height: 120px;
+  margin-bottom: 1.2rem;
+  color: var(--color-muted);
+  font-size: 0.87rem;
+  line-height: 1.7;
+}
+
+/* ---------- Client distribution bars ---------- */
+
+.mix {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mix__row {
+  display: grid;
+  grid-template-columns: 65px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.mix__row > span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mix__bar {
+  display: flex;
+  width: 100%;
+  height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-track);
+}
+
+.mix__bar > span {
+  display: block;
+  height: 100%;
+  min-width: 0;
+}
+
+.mix__bar > span:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.mix__bar > span:last-child {
+  border-radius: 0 999px 999px 0;
+}
+
+/* ---------- Client split note ---------- */
+
+#client-split-note {
+  margin-top: 0;
+  border-top: none;
+}
+
+/* ---------- Tablet responsiveness ---------- */
+
+@media (max-width: 900px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .split-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .split-compare__case p {
+    min-height: 0;
+  }
+}
+
+/* ---------- Mobile responsiveness ---------- */
+
+@media (max-width: 600px) {
+  .page-intro {
+    padding: 1.3rem;
+  }
+
+  .info-list {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .info-list > div {
+    gap: 0.6rem;
+  }
+
+  .info-list dt {
+    flex-basis: 35%;
+    font-size: 0.82rem;
+  }
+
+  .info-list dd {
+    font-size: 0.82rem;
+  }
+
+  .panel__header {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .notes {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .bar-chart {
+    gap: 0.8rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .bar-chart li {
+    grid-template-columns: 105px minmax(35px, 1fr) 55px;
+    gap: 0.5rem;
+  }
+
+  .bar-chart li > span:first-child {
+    font-size: 0.78rem;
+  }
+
+  .bar-chart__value {
+    font-size: 0.75rem;
+  }
+
+  .split-compare {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .panel__footer {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .bar-chart li {
+    grid-template-columns: 90px minmax(25px, 1fr) 48px;
+    gap: 0.4rem;
+  }
+
+  .mix__row {
+    grid-template-columns: 55px minmax(0, 1fr);
+  }
+}

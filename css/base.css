@@ -1,0 +1,92 @@
+/* base.css: design tokens, reset and typography. Change colours ONLY here. */
+
+:root {
+  color-scheme: light;
+
+  /* Navy and teal chrome (sidebar and hero) */
+  --navy-900: #07142b;
+  --teal-500: #14b8a6;
+  --gradient-sidebar: linear-gradient(180deg, #0b1e3f 0%, #07142b 100%);
+  --gradient-hero: linear-gradient(135deg, #12305e 0%, #0e4a68 60%, #0f6b78 100%);
+  --gradient-accent: linear-gradient(135deg, #14b8a6, #2f8fe8);
+  --color-sidebar-text: #b4c3de;
+  --color-hero-text: #d3e0f2;
+  --color-glow: #5eead4;
+  --color-glow-soft: rgba(94, 234, 212, 0.12);
+  --color-overlay: rgba(7, 20, 43, 0.6);
+
+  /* Content area */
+  --color-page: #f0f4f9;
+  --color-topbar: rgba(240, 244, 249, 0.88);
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f9fc;          /* subtle inner panels */
+  --color-ink: #0e1b33;
+  --color-muted: #5a6a85;
+  --color-line: #dbe3ee;
+  --color-primary: #0b6f86;
+  --color-hover: #eef4fa;
+  --color-track: #e2e9f3;              /* empty part of a bar chart */
+  --color-notice: #fff8ee;
+  --shadow-card: 0 1px 2px rgba(10, 27, 56, 0.05), 0 6px 20px rgba(10, 27, 56, 0.06);
+
+  /* One colour per model. Reused later in charts. */
+  --color-centralized: #7c6df0;
+  --color-fedavg: #2f8fe8;
+  --color-fedprox: #e0912f;
+
+  /* Neutral colours for the IID / non-IID illustration */
+  --mix-1: #0b6f86;
+  --mix-2: #7b8fd1;
+  --mix-3: #c9a36a;
+  --mix-4: #b05a7a;
+
+  --font-heading: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+
+  --sidebar-width: 256px;
+  --radius: 14px;
+}
+
+/* Dark theme: only the tokens that change are listed */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-page: #07111f;
+  --color-topbar: rgba(7, 17, 31, 0.88);
+  --color-surface: #0d1b33;
+  --color-surface-2: #11233f;
+  --color-ink: #e6edf8;
+  --color-muted: #94a5c2;
+  --color-line: #1e3354;
+  --color-primary: #4fd1c5;
+  --color-hover: #14284a;
+  --color-track: #1b2f4f;
+  --color-notice: #2a2214;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --color-centralized: #a396ff;
+  --color-fedavg: #6bb2f5;
+  --color-fedprox: #f0b05a;
+  --mix-1: #4fd1c5;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-page);
+}
+
+h1, h2, h3, h4 { margin: 0 0 0.5rem; font-family: var(--font-heading); line-height: 1.2; }
+p { margin: 0 0 1rem; }
+a { color: var(--color-primary); }
+
+/* Visible keyboard focus */
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.sidebar :focus-visible, .hero :focus-visible { outline-color: var(--color-glow); }
+
+/* Respect users who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

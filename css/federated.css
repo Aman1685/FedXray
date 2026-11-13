@@ -1,0 +1,99 @@
+/* federated.css: styles used only on the Federated Learning page */
+
+.fl-page { display: grid; gap: 1.25rem; }
+.fl-intro { max-width: 70ch; }
+.fl-intro h2 { font-size: 1.8rem; }
+.fl-intro p { margin: 0; color: var(--color-muted); }
+.fl-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+
+/* ---------- Interactive training round ---------- */
+.fl-stage { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.5rem; align-items: start; }
+
+.fl-diagram {
+  width: 100%; height: auto; padding: 0.5rem;
+  border: 1px solid var(--color-line); border-radius: 12px;
+  background: var(--color-surface-2); font-family: var(--font-body);
+}
+.fl-diagram text { fill: var(--color-ink); font-size: 14px; font-weight: 500; text-anchor: middle; }
+.fl-diagram .fl-sub { fill: var(--color-muted); font-size: 12px; font-weight: 400; }
+.fl-box { fill: var(--color-surface); stroke: var(--color-line); stroke-width: 1.5; transition: fill 0.25s, stroke 0.25s; }
+.fl-link { fill: none; stroke: var(--color-line); stroke-width: 2; stroke-dasharray: 6 6; transition: stroke 0.25s; }
+
+/* The data-step attribute on the <svg> decides what is highlighted (set by federated.js) */
+.fl-diagram[data-step="1"] .fl-link,
+.fl-diagram[data-step="3"] .fl-link { stroke: var(--color-primary); animation: fl-flow 1s linear infinite; }
+.fl-diagram[data-step="1"] .fl-link { animation-direction: reverse; }   /* step 1: server to clients */
+.fl-diagram[data-step="2"] .fl-client .fl-box,
+.fl-diagram[data-step="4"] .fl-server .fl-box { fill: var(--color-hover); stroke: var(--color-primary); stroke-width: 2.5; }
+@keyframes fl-flow { from { stroke-dashoffset: 12; } to { stroke-dashoffset: 0; } }
+
+.fl-steps { display: grid; gap: 0.5rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.fl-step {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%;
+  padding: 0.65rem 0.85rem; border: 1px solid var(--color-line); border-radius: 10px;
+  background: var(--color-surface); color: inherit; font: inherit; text-align: left; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.fl-step:hover { border-color: var(--color-primary); }
+.fl-step.is-active { border-color: var(--color-primary); background: var(--color-hover); }
+.fl-step__num {
+  display: grid; place-items: center; width: 28px; height: 28px; flex: none;
+  border-radius: 50%; background: var(--color-track); font-size: 0.85rem; font-weight: 600;
+}
+.fl-step.is-active .fl-step__num { background: var(--gradient-accent); color: #fff; }
+
+.fl-explain { padding: 1rem 1.1rem; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-surface-2); }
+.fl-explain h4 { margin: 0 0 0.35rem; }
+.fl-explain p { margin: 0 0 0.5rem; }
+.fl-list { margin: 0; padding-left: 1.1rem; color: var(--color-muted); }
+.fl-list li { margin-bottom: 0.3rem; }
+
+/* ---------- Client-side card ---------- */
+.fl-split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.fl-split h4 { font-size: 1rem; }
+
+/* ---------- Aggregation demo ---------- */
+.fl-sliders, .fl-shares { display: grid; gap: 0.6rem; margin: 1rem 0; }
+.fl-slider, .fl-share { display: grid; grid-template-columns: 5rem 1fr 3.5rem; align-items: center; gap: 0.75rem; font-size: 0.92rem; }
+.fl-slider input { width: 100%; accent-color: var(--color-primary); }
+.fl-slider output { text-align: right; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.fl-share__track { height: 14px; border-radius: 4px; background: var(--color-track); overflow: hidden; }
+.fl-share__fill { display: block; height: 100%; border-radius: 4px; transition: width 0.2s; }
+.fl-share__pct { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.formula {
+  margin: 0; padding: 0.7rem 0.9rem; overflow-x: auto;
+  border: 1px solid var(--color-line); border-radius: 8px; background: var(--color-surface-2);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.88rem;
+}
+
+/* ---------- FedAvg vs FedProx ---------- */
+.fl-algos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.fl-algo {
+  display: grid; gap: 0.6rem; align-content: start; padding: 1.1rem 1.25rem;
+  border: 1px solid var(--color-line); border-top: 4px solid var(--model-color);
+  border-radius: 10px; background: var(--color-surface-2);
+}
+.fl-algo h4, .fl-algo p { margin: 0; }
+.fl-algo p { font-size: 0.92rem; color: var(--color-muted); }
+.fl-algo .formula { color: var(--color-ink); font-size: 0.85rem; }
+
+.fl-table-wrap { overflow-x: auto; border: 1px solid var(--color-line); border-radius: 10px; }
+.fl-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.fl-table th, .fl-table td { padding: 0.7rem 1rem; border-top: 1px solid var(--color-line); text-align: left; vertical-align: top; }
+.fl-table thead th { border-top: 0; background: var(--color-surface-2); }
+.fl-table tbody th { width: 11rem; font-weight: 600; }
+
+/* ---------- Project settings ---------- */
+.fl-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.5rem; margin: 0; }
+.fl-settings div { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.6rem 0; border-top: 1px solid var(--color-line); }
+.fl-settings dt { color: var(--color-muted); }
+.fl-settings dd { margin: 0; font-weight: 500; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .fl-stage, .fl-row, .fl-algos { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .fl-split, .fl-settings { grid-template-columns: 1fr; }
+}

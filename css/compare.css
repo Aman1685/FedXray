@@ -1,0 +1,63 @@
+/* compare.css: styles used only on the Model Comparison page */
+
+[hidden] { display: none !important; }     /* makes the hidden attribute win over display rules below */
+
+.cp-page { display: grid; gap: 1.25rem; }
+.cp-intro { max-width: 70ch; }
+.cp-intro h2 { font-size: 1.8rem; }
+.cp-intro p { margin: 0; color: var(--color-muted); }
+
+/* The banner turns teal when real results are loaded (the colour comes from data-source) */
+.notice[data-source="file"], .notice[data-source="backend"] { border-left-color: var(--teal-500); background: var(--color-hover); }
+.cp-warnings { margin: 0; padding-left: 1.25rem; font-size: 0.9rem; color: var(--color-fedprox); }
+.cp-warnings:empty { display: none; }
+
+.cp-steps { margin: 0 0 1rem; padding-left: 1.25rem; }
+.cp-steps li { margin-bottom: 0.5rem; }
+code { padding: 0.1rem 0.35rem; border-radius: 4px; background: var(--color-surface-2); font-size: 0.9em; }
+
+.cp-content { display: grid; gap: 1.25rem; }
+
+/* ---------- Best value per metric ---------- */
+.cp-leaders { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; }
+.cp-leader {
+  padding: 1rem 1.1rem; border: 1px solid var(--color-line); border-top: 4px solid var(--model-color);
+  border-radius: var(--radius); background: var(--color-surface); box-shadow: var(--shadow-card);
+}
+.cp-leader small, .cp-leader strong, .cp-leader__value { display: block; }
+.cp-leader small { color: var(--color-muted); }
+.cp-leader__value { font: 700 1.5rem var(--font-heading); }
+
+/* ---------- Metric buttons and bar chart ---------- */
+.cp-toggle { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.cp-toggle button {
+  padding: 0.35rem 0.85rem; border: 1px solid var(--color-line); border-radius: 999px;
+  background: var(--color-surface); color: var(--color-ink); font: inherit; font-size: 0.88rem; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.cp-toggle button:hover { border-color: var(--color-primary); }
+.cp-toggle button.is-active { border-color: transparent; background: var(--gradient-accent); color: #fff; }
+
+.cp-bars { display: grid; gap: 0.65rem; margin: 1.25rem 0 1rem; padding: 0; list-style: none; }
+.cp-bar { display: grid; grid-template-columns: 12rem 1fr 4rem; align-items: center; gap: 0.75rem; font-size: 0.92rem; }
+.cp-bar__track { height: 18px; border-radius: 5px; background: var(--color-track); overflow: hidden; }
+.cp-bar__fill { display: block; height: 100%; border-radius: 5px; background: var(--model-color); }
+.cp-bar__value { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.cp-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0 0 0.5rem; padding: 0; list-style: none; font-size: 0.88rem; }
+.cp-dot { display: inline-block; width: 10px; height: 10px; margin-right: 0.45rem; border-radius: 50%; }
+
+/* ---------- Table ---------- */
+.cp-table-wrap { overflow-x: auto; border: 1px solid var(--color-line); border-radius: 10px; }
+.cp-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.cp-table th, .cp-table td { padding: 0.7rem 1rem; border-top: 1px solid var(--color-line); text-align: right; white-space: nowrap; }
+.cp-table thead th { border-top: 0; background: var(--color-surface-2); }
+.cp-table th:first-child { position: sticky; left: 0; text-align: left; background: var(--color-surface); }
+.cp-table thead th:first-child { background: var(--color-surface-2); }
+.cp-table tbody th { font-weight: 500; }
+.cp-table td.is-best { font-weight: 700; color: var(--color-primary); }
+
+@media (max-width: 600px) {
+  .cp-bar { grid-template-columns: 1fr auto; gap: 0.3rem 0.75rem; }
+  .cp-bar__track { grid-column: 1 / -1; grid-row: 2; }
+}
