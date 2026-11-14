@@ -41,4 +41,5 @@ renderFederated();
 initModelSelection();
 initPrediction();
 initComparison();
+renderAbout();
 refreshBackendStatus();

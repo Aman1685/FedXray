@@ -92,10 +92,11 @@ const ACTIVITY = [
   { title: "Dataset section added", detail: "Labels, distribution chart, IID and non-IID explanation.", state: "done" },
   { title: "Light and dark theme added", detail: "Your choice is saved in the browser.", state: "done" },
   { title: "Federated Learning section added", detail: "Interactive round, aggregation demo, FedAvg vs FedProx.", state: "done" },
-    { title: "Model Selection section added", detail: "Choose a model and training configuration.", state: "done" },
-    { title: "X-ray Prediction section added", detail: "Upload, preview, model display and probability results.", state: "done" },
-    { title: "Model Comparison section added", detail: "Metric cards, ranked chart and table (real numbers only).", state: "done" },
-  { title: "About Project section", detail: "Objectives, technologies and team.", state: "done" },
+{ title: "Model Selection section added", detail: "Choose a model and training configuration.", state: "done" },
+{ title: "X-ray Prediction section added", detail: "Upload, preview, model display and probability results.", state: "done" },
+{ title: "Model Comparison section added", detail: "Metric cards, ranked chart and table (real numbers only).", state: "done" },
+{ title: "About Project section added", detail: "Description, objectives, technologies, team and references.", state: "done" },
+{title: "Real Evaluation Results & Model Comparison",detail: "Test-set evaluation metrics integrated for all 7 trained model configurations.",state: "done"},
 { title: "Flask backend integration", detail: "Model catalogue and X-ray prediction connected.", state: "done" },
 { title: "Official model evaluation", detail: "Requires the official test dataset and evaluation results.", state: "planned" }
 ];

@@ -1,0 +1,97 @@
+/* about.css: styles used only on the About Project page */
+
+.ab-page { display: grid; gap: 1.25rem; }
+.ab-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+
+#about-description p { max-width: 75ch; }
+.ab-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.ab-chip { padding: 0.3rem 0.75rem; border: 1px solid var(--color-line); border-radius: 999px; background: var(--color-surface-2); font-size: 0.85rem; }
+
+/* ---------- Objectives (numbered) ---------- */
+.ab-objectives { display: grid; gap: 0.85rem; margin: 0; padding: 0; list-style: none; counter-reset: objective; }
+.ab-objectives li { position: relative; padding-left: 2.5rem; counter-increment: objective; }
+.ab-objectives li::before {
+  content: counter(objective); position: absolute; left: 0; top: 0;
+  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--gradient-accent); color: #fff; font-size: 0.85rem; font-weight: 600;
+}
+
+/* ---------- How the pieces fit (vertical timeline) ---------- */
+.ab-flow { margin: 0; padding: 0; list-style: none; }
+.ab-flow li { position: relative; padding: 0 0 1.1rem 1.75rem; }
+.ab-flow li::before { content: ""; position: absolute; left: 0; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: var(--teal-500); }
+.ab-flow li:not(:last-child)::after { content: ""; position: absolute; left: 5px; top: 1.3rem; bottom: 0; width: 2px; background: var(--color-line); }
+.ab-flow strong { display: block; }
+.ab-flow__text { font-size: 0.9rem; color: var(--color-muted); }
+
+/* ---------- Technologies ---------- */
+.ab-tech-groups { display: grid; gap: 1.5rem; }
+.ab-tech-group h4 { margin: 0 0 0.6rem; font-size: 1rem; }
+.ab-tech-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.ab-tech {
+  display: flex; flex-direction: column; gap: 0.25rem; padding: 0.85rem 1rem;
+  border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-surface-2);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.ab-tech:hover { transform: translateY(-2px); border-color: var(--color-primary); }
+.ab-tech__use { font-size: 0.88rem; color: var(--color-muted); }
+.ab-tech .badge { align-self: flex-start; margin-top: 0.25rem; }
+
+/* ---------- Team ---------- */
+.ab-team { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.ab-member { display: flex; align-items: center; gap: 0.9rem; padding: 1rem 1.1rem; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-surface-2); }
+.ab-avatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  color: #000000;
+  font: 700 1rem var(--font-heading);
+  text-align: center;
+  line-height: 48px;
+  padding: 0;
+  box-sizing: border-box;
+}
+.ab-member strong, .ab-member span, .ab-member small { display: block; }
+.ab-member span, .ab-member small { font-size: 0.9rem; color: var(--color-muted); }
+
+.ab-facts { margin: 0; }
+.ab-facts div { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.6rem 0; border-top: 1px solid var(--color-line); }
+.ab-facts dt { color: var(--color-muted); }
+.ab-facts dd { margin: 0; font-weight: 500; text-align: right; }
+
+/* ---------- References ---------- */
+.ab-refs { margin: 0; padding-left: 1.25rem; }
+.ab-refs li { margin-bottom: 0.6rem; }
+
+@media (max-width: 900px) {
+  .ab-row { grid-template-columns: 1fr; }
+}
+/* ---------- Gradient borders for About page boxes ---------- */
+
+.ab-page .card {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    var(--gradient-accent) border-box;
+}
+
+/* Technology boxes */
+.ab-tech {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--color-surface-2), var(--color-surface-2)) padding-box,
+    var(--gradient-accent) border-box;
+}
+
+/* Team member boxes */
+.ab-member {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--color-surface-2), var(--color-surface-2)) padding-box,
+    var(--gradient-accent) border-box;
+}

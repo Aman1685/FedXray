@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/models.css">
   <link rel="stylesheet" href="css/predict.css">
   <link rel="stylesheet" href="css/compare.css">
+  <link rel="stylesheet" href="css/about.css">
   <style>
     .px-threshold-control {
       display: grid;
@@ -591,81 +592,76 @@
 
         </div>
       </section>
-      <!-- VIEW: ABOUT THE PROJECT -->
-<section class="view" id="view-about">
+      <!-- VIEW: ABOUT PROJECT -->
+      <section class="view" id="view-about">
+        <div class="ab-page">
 
-  <div class="page-intro">
-    <h2>About FedXray</h2>
-    <p>A research prototype exploring federated learning for multi-label chest X-ray classification using the NIH ChestX-ray14 dataset.</p>
-  </div>
+          <section class="card">
+            <div class="card__head">
+              <span class="card__icon" data-icon="about"></span>
+              <div><h3>Project description</h3><p>Federated Learning-Based Chest X-ray Image Classification Using FedAvg and FedProx</p></div>
+            </div>
+            <div id="about-description"></div>
+            <ul class="ab-chips">
+              <li class="ab-chip">NIH ChestX-ray14</li>
+              <li class="ab-chip">14 labels</li>
+              <li class="ab-chip">Multi-label</li>
+              <li class="ab-chip">Centralized, FedAvg, FedProx</li>
+            </ul>
+          </section>
 
-  <div class="two-column">
-    <section class="panel">
-      <div class="panel__header"><h3>Project overview</h3></div>
-      <p class="card__text">
-        FedXray studies how multiple clients can collaboratively train a chest X-ray classification model without sending their local images to a central server. Each client trains locally and shares model updates; the server combines those updates to produce a global model.
-      </p>
-    </section>
+          <div class="ab-row">
+            <section class="card">
+              <div class="card__head">
+                <span class="card__icon" data-icon="compass"></span>
+                <div><h3>Research objectives</h3><p>What the project sets out to do</p></div>
+              </div>
+              <ol class="ab-objectives" id="about-objectives"></ol>
+            </section>
 
-    <section class="panel">
-      <div class="panel__header"><h3>Problem being addressed</h3></div>
-      <p class="card__text">
-        Medical imaging data can be distributed across hospitals and institutions. Moving all images to one location may be difficult because of privacy, governance and data-sharing constraints. Federated learning offers a way to study collaborative model training while keeping the training images at their respective clients.
-      </p>
-    </section>
-  </div>
+            <section class="card">
+              <div class="card__head">
+                <span class="card__icon" data-icon="federated"></span>
+                <div><h3>How the pieces fit</h3><p>From data to this interface</p></div>
+              </div>
+              <ol class="ab-flow" id="about-pipeline"></ol>
+            </section>
+          </div>
 
-  <section class="panel">
-    <div class="panel__header"><h3>Project objectives</h3></div>
-    <ul class="notes">
-      <li>Explore multi-label classification of thoracic findings in chest X-ray images.</li>
-      <li>Study federated training with client-side data partitions.</li>
-      <li>Understand and compare FedAvg and FedProx approaches.</li>
-      <li>Provide an interface to select an available model, upload an image and view predicted label probabilities.</li>
-      <li>Present evaluation results only when verified metrics are available.</li>
-    </ul>
-  </section>
+          <section class="card">
+            <div class="card__head">
+              <span class="card__icon" data-icon="layers"></span>
+              <div><h3>Technologies used</h3><p>Tools and methods behind FedXray</p></div>
+            </div>
+            <div class="ab-tech-groups" id="about-technologies"></div>
+          </section>
 
-  <div class="two-column">
-    <section class="panel">
-      <div class="panel__header"><h3>Technology stack</h3></div>
-      <dl class="info-list">
-        <div><dt>Frontend</dt><dd>HTML, CSS and JavaScript</dd></div>
-        <div><dt>Backend</dt><dd>Python with Flask</dd></div>
-        <div><dt>Deep learning</dt><dd>PyTorch</dd></div>
-        <div><dt>Image handling</dt><dd>Pillow and NumPy</dd></div>
-        <div><dt>Learning setup</dt><dd>Centralized and federated experiments</dd></div>
-      </dl>
-    </section>
+          <section class="card">
+            <div class="card__head">
+              <span class="card__icon" data-icon="users"></span>
+              <div><h3>Project team</h3><p>Placeholders until you fill them in</p></div>
+            </div>
+            <div class="ab-team" id="about-team"></div>
+            <dl class="ab-facts" id="about-institution"></dl>
+            <p class="card__note">To fill these in, open js/about.js and edit ABOUT_TEAM and ABOUT_INSTITUTION at the top.</p>
+          </section>
 
-    <section class="panel">
-      <div class="panel__header"><h3>Dataset at a glance</h3></div>
-      <dl class="info-list">
-        <div><dt>Dataset</dt><dd>NIH ChestX-ray14</dd></div>
-        <div><dt>Images</dt><dd>112,120 frontal-view chest X-rays</dd></div>
-        <div><dt>Patients</dt><dd>30,805</dd></div>
-        <div><dt>Labels</dt><dd>14 thoracic findings</dd></div>
-        <div><dt>Task</dt><dd>Multi-label image classification</dd></div>
-      </dl>
-    </section>
-  </div>
+          <section class="card">
+            <div class="card__head">
+              <span class="card__icon" data-icon="dataset"></span>
+              <div><h3>References</h3><p>Dataset and methods</p></div>
+            </div>
+            <ol class="ab-refs" id="about-references"></ol>
+          </section>
 
-  <section class="panel">
-    <div class="panel__header"><h3>How the system works</h3></div>
-    <ol class="notes">
-      <li><strong>Data partitioning:</strong> The dataset is divided among simulated clients using IID or non-IID partitions.</li>
-      <li><strong>Local training:</strong> Each client trains using its own local data.</li>
-      <li><strong>Model aggregation:</strong> The server combines client updates to form a global model.</li>
-      <li><strong>Prediction:</strong> An uploaded image is processed by the backend and passed to the available model.</li>
-      <li><strong>Results:</strong> The interface displays predicted probabilities for the 14 labels.</li>
-    </ol>
-  </section>
+          <aside class="notice" role="note">
+            <strong>Research use only.</strong> FedXray is an academic prototype for studying
+            federated learning. Its outputs are not medical advice and must not be used to diagnose
+            or treat any condition.
+          </aside>
 
-  <aside class="notice" role="note">
-    <strong>Important limitation.</strong>
-    FedXray is an academic research prototype. Predictions may be incorrect and are not medical diagnoses. Do not use the system for clinical decisions or treatment.
-  </aside>
-</section>
+        </div>
+      </section>
       <!-- VIEW: shown for sections that are not built yet -->
       <section class="view" id="view-pending">
         <div class="panel empty-state">
@@ -690,6 +686,7 @@
   <script src="js/predict.js"></script>
   <script src="js/results-data.js"></script>
   <script src="js/compare.js"></script>
+  <script src="js/about.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
